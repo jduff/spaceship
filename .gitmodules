@@ -1,0 +1,3 @@
+[submodule "lib/chingu"]
+	path = lib/chingu
+	url = git://github.com/jduff/chingu.git
