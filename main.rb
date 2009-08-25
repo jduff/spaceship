@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'gosu'
-require File.join(File.dirname($0), "lib", "chingu", "chingu")
+require File.join(File.dirname($0), "lib", "chingu", "lib", "chingu")
 include Gosu
 
 require 'constants'
