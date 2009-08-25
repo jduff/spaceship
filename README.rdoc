@@ -1,0 +1,10 @@
+= Getting Started
+Install Gosu
+  sudo gem install gosu
+  
+Update Submodules
+  git submodule init
+  git submodule update
+
+Run the Game
+  ruby main.rb
