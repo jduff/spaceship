@@ -1,4 +1,7 @@
 = Getting Started
+Clone Spaceship
+  git clone git://github.com/jduff/spaceship.git
+
 Install Gosu
   sudo gem install gosu
   
