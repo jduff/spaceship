@@ -89,7 +89,7 @@ class SteeringBehaviors
   end
     
 
-  def calculate
+  def calculate(time)
     @force.zero!
     if @behaviors[:seek]
       @force += seek(@vehicle.target) if @vehicle.target
@@ -115,7 +115,33 @@ class SteeringBehaviors
       @force += wander
     end
     
-    return @force
+    @vel = Vector2d.new(0,0)
+    
+    @accel = @force / @vehicle.mass
+    @accel.truncate!(@vehicle.max_force)
+    
+    rads = Math::PI / 180
+    new_velocity = @vehicle.vel + @accel * time / 1000.0
+    @angle = Vector2d.angle(@vehicle.heading, new_velocity) * rads
+    max_angle = (@vehicle.max_turn_rate * rads  / 1000.0) * time
+    
+    if @angle.abs > max_angle
+      sign = Vector2d.sign(@vehicle.heading, new_velocity)
+      corrected_angle = @vehicle.heading.radians + max_angle * sign
+      @vel.x = Math.sin(corrected_angle) * new_velocity.length
+      @vel.y = - Math.cos(corrected_angle) * new_velocity.length
+    else
+      @vel = new_velocity
+    end
+    
+    @vel.truncate!(@vehicle.max_speed)
+    pos = @vehicle.pos + @vel * time / 1000.0
+    
+    if @vel.length_sq > 0.0001
+      angle = @vel.normalize
+    end
+    
+    return [pos.x, pos.y, angle]
   end
 
   def debug(var, f_string, m_name = nil)

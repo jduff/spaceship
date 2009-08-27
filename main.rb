@@ -4,10 +4,10 @@ require File.join(File.dirname($0), "lib", "chingu", "lib", "chingu")
 include Gosu
 
 require 'constants'
-require 'extensions'
-require 'keyboard_manager'
-
 require 'behaviors/vector2d'
+require 'extensions'
+
+
 require 'behaviors/steering_behaviors'
 
 require 'ship'
@@ -19,20 +19,24 @@ class GameWindow < Chingu::Window
     super(SCREEN_WIDTH, SCREEN_HEIGHT)
     self.caption = "Gosu Tutorial Game"
     
-    @player = Player.new(self)
-    # @player.input = PLAYER_INPUT
+    @player = Player.new
+    @player.input = PLAYER_INPUT
     @player.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     
-    @enemy = Ship.new(self)
+    @enemy = Ship.new
     @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
     
-    @enemy.pursue(@player)
+    @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
+    
+    @enemy2 = Ship.new
+    @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    
+    @enemy2.steering = Pursue.new(@player)
 
     @star_anim = Image::load_tiles(self, "media/Star.png", 25, 25, false)
     @stars = Array.new
     
     @score = Chingu::Text.new(:text=>"Score: #{@player.score}", :x=>10, :y=>10, :zorder=>ZOrder::UI, :color=>0xffffff00, :factor=>1.5)
-    @keyboard = KeyboardManager.new(@player, self)
     
     @last_time = Gosu::milliseconds
     
@@ -42,13 +46,9 @@ class GameWindow < Chingu::Window
   def update
     super
     new_time = Gosu::milliseconds
-    @enemy.update(new_time-@last_time).validate_position!
     @last_time = new_time
     
-    # Check keyboard
-    @keyboard.execute
-    
-    @player.update.validate_position!
+    # @player.validate_position!
     @player.collect_stars(@stars)
     
     if rand(100) < 4 && @stars.size < 25
