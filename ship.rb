@@ -1,6 +1,8 @@
 require 'behaviors/base'
-require 'behaviors/pursue'
 require 'behaviors/seek'
+require 'behaviors/pursue'
+require 'behaviors/flee'
+require 'behaviors/evade'
 class Ship < Chingu::GameObject
   attr_accessor :vel_x, :vel_y, :steering
   
