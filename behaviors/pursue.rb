@@ -5,9 +5,9 @@ class Pursue < Seek
   end
   
   def calculate(time, object)  
-    target_pos = Vector2d.new(@target_vehicle.x, @target_vehicle.y)
+    target_pos = Vector2d(@target_vehicle)
   
-    to_evader = target_pos - Vector2d.new(object.x, object.y)
+    to_evader = target_pos - Vector2d(object)
   
     object_heading = object.angle.angle_to_vect
     evader_heading = @target_vehicle.angle.angle_to_vect

@@ -9,3 +9,8 @@ class Numeric
     Vector2d.new(Float(Math::cos(self.to_rads)), Float(Math::sin(self.to_rads)))
   end
 end
+
+# casting in ruby? I think so!
+def Vector2d(object)
+  Vector2d.new(object.x, object.y)
+end
