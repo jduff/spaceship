@@ -3,6 +3,7 @@ require 'behaviors/seek'
 require 'behaviors/pursue'
 require 'behaviors/flee'
 require 'behaviors/evade'
+require 'behaviors/wander'
 class Ship < Chingu::GameObject
   attr_accessor :vel_x, :vel_y, :steering
   
@@ -39,11 +40,11 @@ class Ship < Chingu::GameObject
   
   def update(time)
     super(time)
+        validate_position!
     @steering.calculate(time, self) if @steering
     @x += @vel_x
     @y += @vel_y
     
-    validate_position!
     
     return self
   end

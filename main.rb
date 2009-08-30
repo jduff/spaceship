@@ -26,22 +26,28 @@ class GameWindow < Chingu::Window
     @enemy = Ship.new
     @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
     
-    @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
-    
-    @enemy2 = Ship.new
-    @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
-    
-    @enemy2.steering = Pursue.new(@player)
-    
-    @enemy3 = Ship.new
-    @enemy3.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    
-    @enemy3.steering = Flee.new(0,0)
-    
-    @enemy4 = Ship.new
-    @enemy4.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    
-    @enemy4.steering = Evade.new(@player)
+    @enemy.steering = Wander.new
+
+
+    # @enemy = Ship.new
+    # @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    # 
+    # @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
+    # 
+    # @enemy2 = Ship.new
+    # @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    # 
+    # @enemy2.steering = Pursue.new(@player)
+    # 
+    # @enemy3 = Ship.new
+    # @enemy3.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    # 
+    # @enemy3.steering = Flee.new(0,0)
+    # 
+    # @enemy4 = Ship.new
+    # @enemy4.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    # 
+    # @enemy4.steering = Evade.new(@player)
 
     @star_anim = Image::load_tiles(self, "media/Star.png", 25, 25, false)
     @stars = Array.new

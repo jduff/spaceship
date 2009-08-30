@@ -1,6 +1,6 @@
 class Base
   def initialize(*args)
-    @max_speed = 480 # should be on the vehicle
+    @max_speed = 580 # should be on the vehicle
     @mass = Float(1)
     @max_force = 1200
     @max_turn_rate = 180

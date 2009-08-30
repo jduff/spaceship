@@ -1,8 +1,7 @@
 class Flee < Base
-  def initialize(x, y)
+  def initialize(*args)
     super
-    @target = Vector2d.new(x,y)
-
+    @target = args.length==1 ? Vector2d(args.first) : Vector2d.new(*args)
   end
   
   def calculate(time, object)

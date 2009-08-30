@@ -1,6 +1,6 @@
 class Evade < Flee
   def initialize(target)
-    super(0,0)
+    super(target)
     @pursuing_vehicle = target
   end
   
