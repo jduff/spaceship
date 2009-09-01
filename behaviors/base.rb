@@ -1,3 +1,4 @@
+require 'behaviors/vector2d'
 class Base
   def initialize(*args)
     @max_speed = 580 # should be on the vehicle

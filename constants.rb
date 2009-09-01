@@ -6,7 +6,8 @@ DAMPING       = 0.8
 
 PLAYER_INPUT = {:holding_left=>:turn_left, :holding_right=>:turn_right,
                 :holding_up=>:accelerate, :holding_down=>:reverse, :holding_a=>:turn_left,
-                :holding_d=>:turn_right, :holding_w=>:accelerate, :holding_s=>:reverse}
+                :holding_d=>:turn_right, :holding_w=>:accelerate, :holding_s=>:reverse, 
+                :space=>:fire}
 
 module ZOrder
   Background, Stars, Ship, UI = *0..3

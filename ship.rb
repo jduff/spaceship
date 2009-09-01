@@ -8,30 +8,16 @@ class Ship < Chingu::GameObject
   attr_accessor :vel_x, :vel_y, :steering
   
   def initialize
-    super(:image=>Image["Starfighter.bmp"], :zorder=>ZOrder::Ship)
+    super(:image=>Image["Starfighter.bmp"], :zorder=>ZOrder::Ship, :factor=>0.75)
 
-    # @steering = SteeringBehaviors.new(Vehicle.new(self))
-    
     @vel_x = 0.0
     @vel_y = 0.0
   end
   
-  # def pursue(obj)
-  #   @evader = obj
-  #   @steering.behaviors[:pursuit] = true
-  # end
-  
   def warp(loc_x, loc_y)
     # @pos.x, @pos.y = x, y
-    @x, @y = loc_x, loc_y
-  end
-  
-  def x=(val)
-    @x = val
-  end
-  
-  def y=(val)
-    @y=val
+    self.x = loc_x
+    self.y = loc_y
   end
   
   def angle=(val)
@@ -40,22 +26,36 @@ class Ship < Chingu::GameObject
   
   def update(time)
     super(time)
-        validate_position!
+    validate_position!
+    
     @steering.calculate(time, self) if @steering
-    @x += @vel_x
-    @y += @vel_y
-    
-    
+    self.x += @vel_x
+    self.y += @vel_y
+  
     return self
   end
   
   def validate_position!
-    @x %= SCREEN_WIDTH
-    @y %= SCREEN_HEIGHT
+    self.x %= SCREEN_WIDTH
+    self.y %= SCREEN_HEIGHT
+  end
+  
+  def fire
+    Bullet.new(:x=>self.x, :y=>self.y, :angle=>self.angle)
   end
 
-  def draw
+end
+
+class Bullet < Chingu::GameObject
+  def initialize(options={})
+    super({:image=>Image["burst.png"], :zorder=>ZOrder::Ship, :factor=>0.3}.merge(options))
+  end
+  
+  def update(time)
     super
-    # @image.draw_rot(@pos.x, @pos.y, ZOrder::Ship, @heading.angle, 0.5, 0.5, 0.75, 0.75)
+    @factor_x = rand * 0.3
+    vect = (angle - 90).angle_to_vect * 2.5
+    self.x += vect.x
+    self.y += vect.y
   end
 end

@@ -44,12 +44,14 @@ class Player < Ship
     @vel_x *=0.95
     @vel_y *=0.95
     
+    self.collect_stars
+    
     return self
   end
   
-  def collect_stars(stars)
-    stars.reject! do |star|
-      if Gosu::distance(@x, @y, star.x, star.y) < 35 then
+  def collect_stars
+    $window.game_objects.reject! do |star|
+      if star.is_a?(Star) && Gosu::distance(@x, @y, star.x, star.y) < 35
         @score += 10
         true
       else

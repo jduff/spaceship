@@ -4,7 +4,6 @@ require File.join(File.dirname($0), "lib", "chingu", "lib", "chingu")
 include Gosu
 
 require 'constants'
-require 'behaviors/vector2d'
 require 'extensions'
 
 
@@ -23,21 +22,21 @@ class GameWindow < Chingu::Window
     @player.input = PLAYER_INPUT
     @player.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     
-    @enemy = Ship.new
-    @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
-    
-    @enemy.steering = Wander.new
-
-
     # @enemy = Ship.new
     # @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
     # 
-    # @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
-    # 
-    # @enemy2 = Ship.new
-    # @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
-    # 
-    # @enemy2.steering = Pursue.new(@player)
+    # @enemy.steering = Wander.new
+
+
+    @enemy = Ship.new
+    @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    
+    @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
+    
+    @enemy2 = Ship.new
+    @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    
+    @enemy2.steering = Pursue.new(@player)
     # 
     # @enemy3 = Ship.new
     # @enemy3.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
@@ -50,7 +49,7 @@ class GameWindow < Chingu::Window
     # @enemy4.steering = Evade.new(@player)
 
     @star_anim = Image::load_tiles(self, "media/Star.png", 25, 25, false)
-    @stars = Array.new
+    # @stars = Array.new
     
     @score = Chingu::Text.new(:text=>"Score: #{@player.score}", :x=>10, :y=>10, :zorder=>ZOrder::UI, :color=>0xffffff00, :factor=>1.5)
     
@@ -61,24 +60,16 @@ class GameWindow < Chingu::Window
 
   def update
     super
-    new_time = Gosu::milliseconds
-    @last_time = new_time
-    
-    # @player.validate_position!
-    @player.collect_stars(@stars)
-    
-    if rand(100) < 4 && @stars.size < 25
-      @stars.push(Star.new(@star_anim))
+    if rand(100) < 4 && game_objects_of_class(Star).size < 25
+      Star.new(@star_anim)
     end
   end
 
   def draw
     super
     Image["Space.png"].draw(0, 0, ZOrder::Background)
-    @player.draw
     @score.text="Score: #{@player.score}"
-    @enemy.draw
-    @stars.each { |star| star.draw }
+    # @stars.each { |star| star.draw }
   end
 end
 
