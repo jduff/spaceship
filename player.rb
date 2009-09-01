@@ -50,12 +50,10 @@ class Player < Ship
   end
   
   def collect_stars
-    $window.game_objects.reject! do |star|
-      if star.is_a?(Star) && Gosu::distance(@x, @y, star.x, star.y) < 35
+    $window.game_objects_of_class(Star).each do |star|
+      if Gosu::distance(@x, @y, star.x, star.y) < 35
         @score += 10
-        true
-      else
-        false
+        star.destroy!
       end
     end
   end
