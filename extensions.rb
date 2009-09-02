@@ -10,7 +10,6 @@ class Numeric
   end
 end
 
-# casting in ruby? I think so!
 def Vector2d(object)
   Vector2d.new(object.x, object.y)
 end

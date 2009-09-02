@@ -9,6 +9,7 @@ require 'extensions'
 
 require 'behaviors/steering_behaviors'
 
+require 'bullet'
 require 'ship'
 require 'player'
 require 'star'
@@ -67,9 +68,9 @@ class GameWindow < Chingu::Window
 
   def draw
     super
+    $window.caption = "[particles#: #{game_objects.size} - framerate: #{$window.fps}]"
     Image["Space.png"].draw(0, 0, ZOrder::Background)
     @score.text="Score: #{@player.score}"
-    # @stars.each { |star| star.draw }
   end
 end
 

@@ -2,7 +2,7 @@ class Star < Chingu::GameObject
   attr_reader :x, :y
   
   def initialize(animation)
-    super(:x=>rand * 640, :y=>rand * 640, :color=>Gosu::Color.new(0xff000000))
+    super(:x=>rand * SCREEN_WIDTH, :y=>rand*SCREEN_HEIGHT, :color=>Gosu::Color.new(0xff000000))
     @animation = animation
     @color.red = rand(255 - 40) + 40
     @color.green = rand(255 - 40) + 40
