@@ -34,8 +34,8 @@ class Player < Ship
     @vel_y -= Gosu::offset_y(angle, 0.5)
   end
   
-  def update(ticks)
-    super(ticks)
+  def update
+    super
     # @x += @vel_x
     # @y += @vel_y
     # # @pos.x += @vel.x

@@ -24,11 +24,11 @@ class Ship < Chingu::GameObject
     @angle = val
   end
   
-  def update(time)
-    super(time)
+  def update
+    super
     validate_position!
     
-    @steering.calculate(time, self) if @steering
+    @steering.calculate($window.dt, self) if @steering
     self.x += @vel_x
     self.y += @vel_y
   
@@ -51,7 +51,7 @@ class Bullet < Chingu::GameObject
     super({:image=>Image["burst.png"], :zorder=>ZOrder::Ship, :factor=>0.3}.merge(options))
   end
   
-  def update(time)
+  def update
     super
     @factor_x = rand * 0.3
     vect = (angle - 90).angle_to_vect * 2.5
