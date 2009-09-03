@@ -7,10 +7,14 @@ require 'constants'
 require 'extensions'
 
 
-require 'behaviors/steering_behaviors'
+# require 'behaviors/steering_behaviors'
+
+require File.join(File.dirname($0), "lib", "ruby_steering_behaviors", "lib", "steering_behaviors", "vector2d")
+require File.join(File.dirname($0), "lib", "ruby_steering_behaviors", "lib", "steering_behaviors", "steering_behaviors")
 
 require 'bullet'
 require 'ship'
+require 'enemy'
 require 'player'
 require 'star'
 
@@ -29,15 +33,16 @@ class GameWindow < Chingu::Window
     # @enemy.steering = Wander.new
 
 
-    @enemy = Ship.new
+    @enemy = Enemy.new
     @enemy.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    @enemy.seek(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
     
-    @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
+    # @enemy.steering = Seek.new(rand(SCREEN_WIDTH),rand(SCREEN_HEIGHT))
     
-    @enemy2 = Ship.new
-    @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
+    # @enemy2 = Enemy.new 
+    # @enemy2.warp(rand(SCREEN_WIDTH), rand(SCREEN_HEIGHT))
     
-    @enemy2.steering = Pursue.new(@player)
+    # @enemy2.steering = Pursue.new(@player)
     # 
     # @enemy3 = Ship.new
     # @enemy3.warp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)

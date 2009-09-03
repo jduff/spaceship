@@ -5,17 +5,16 @@ require 'behaviors/flee'
 require 'behaviors/evade'
 require 'behaviors/wander'
 class Ship < Chingu::GameObject
-  attr_accessor :vel_x, :vel_y, :steering
+  attr_accessor :vel_x, :vel_y
   
   def initialize
     super(:image=>Image["Starfighter.bmp"], :zorder=>ZOrder::Ship, :factor=>0.75)
-
+    @damage = 100
     @vel_x = 0.0
     @vel_y = 0.0
   end
   
   def warp(loc_x, loc_y)
-    # @pos.x, @pos.y = x, y
     self.x = loc_x
     self.y = loc_y
   end
@@ -27,8 +26,6 @@ class Ship < Chingu::GameObject
   def update
     super
     validate_position!
-    
-    @steering.calculate($window.dt, self) if @steering
     self.x += @vel_x
     self.y += @vel_y
   
@@ -41,7 +38,12 @@ class Ship < Chingu::GameObject
   end
   
   def fire
-    Bullet.new(:x=>self.x, :y=>self.y, :angle=>self.angle)
+    Bullet.new(:x=>self.x, :y=>self.y, :angle=>self.angle, :creator=>self)
+  end
+  
+  def collide(damage)
+    @damage -= damage
+    destroy! if @damage <= 0
   end
 
 end

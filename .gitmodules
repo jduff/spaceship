@@ -1,3 +1,6 @@
 [submodule "lib/chingu"]
 	path = lib/chingu
 	url = git://github.com/jduff/chingu.git
+[submodule "lib/ruby_steering_behaviors"]
+	path = lib/ruby_steering_behaviors
+	url = git://github.com/jduff/ruby_steering_behaviors.git

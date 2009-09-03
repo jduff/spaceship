@@ -7,21 +7,21 @@ class Player < Ship
   end
   
   def turn_left
-    rotate(-4.0)
+    rotate(-3.0)
   end
   
   def turn_right
-    rotate(4.0)
+    rotate(3.0)
   end
   
   def accelerate
-    @vel_x += Gosu::offset_x(angle, 0.5)
-    @vel_y += Gosu::offset_y(angle, 0.5)
+    @vel_x += Gosu::offset_x(angle, 0.2)
+    @vel_y += Gosu::offset_y(angle, 0.2)
   end
   
   def reverse
-    @vel_x -= Gosu::offset_x(angle, 0.5)
-    @vel_y -= Gosu::offset_y(angle, 0.5)
+    @vel_x -= Gosu::offset_x(angle, 0.1)
+    @vel_y -= Gosu::offset_y(angle, 0.1)
   end
   
   def update
