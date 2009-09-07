@@ -1,4 +1,4 @@
-class Star < Chingu::GameObject
+class Star < Chingu::Actor
   attr_reader :x, :y
   
   def initialize(animation)

@@ -4,7 +4,7 @@ require 'behaviors/pursue'
 require 'behaviors/flee'
 require 'behaviors/evade'
 require 'behaviors/wander'
-class Ship < Chingu::GameObject
+class Ship < Chingu::Actor
   attr_accessor :vel_x, :vel_y
   
   def initialize
