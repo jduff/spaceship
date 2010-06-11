@@ -36,8 +36,13 @@ class Ship < GameObject
     self.angle += 3.0
   end
 
-  def update
+  def fire
+    direction = [Gosu::offset_x(angle, 5), Gosu::offset_y(angle, 5)]
+    d2 = [Gosu::offset_x(angle, self.image.width/2), Gosu::offset_y(angle, self.image.height/2)]
+    Bullet.create(:x => self.x+d2[0], :y => self.y+d2[1], :velocity => direction)
+  end
 
+  def update
     if @motion == :accelerate
       scale = -0.05
     elsif @motion == :reverse
@@ -54,14 +59,14 @@ class Ship < GameObject
                           :rotation_rate => +1,
                           :mode => :default
                         )
-    Chingu::Particle.destroy_if { |object| object.parent.outside_viewport?(object) || object.color.alpha == 0 }
+    Chingu::Particle.destroy_if { |object| object.color.alpha == 0 }
 
     #
     # Revert ship to last positions when:
     # - ship is outside the viewport
     # - ship is colliding with at least one object of class Asteroid
     #
-    if self.parent.outside_viewport?(self) || self.first_collision(Asteroid)
+    if self.parent.viewport.outside_game_area?(self) || self.first_collision(Asteroid)
       @x, @y = @last_x, @last_y
       # bounce back a bit when you hit something
       @velocity_x, @velocity_y = -@velocity_x, -@velocity_y
@@ -79,8 +84,50 @@ class Player < Ship
   def setup
     super
 
-    self.input = {:holding_up=>:accelerate, :holding_down=>:reverse, :holding_left=>:turn_left, :holding_right=>:turn_right}
+    self.input = { :holding_up    => :accelerate,
+                   :holding_down  => :reverse,
+                   :holding_left  => :turn_left,
+                   :holding_right => :turn_right,
+                   :space         => :fire}
+    update
   end
+end
+
+class Bullet < GameObject
+  trait :bounding_circle, :debug=>DEBUG
+  traits :collision_detection, :velocity, :timer
+
+  def setup
+    @image = Image["fire_bullet.png"]
+    self.factor = 0.75
+    @damage = 10
+
+    @dead = false
+  end
+
+  def die
+    self.velocity = [0,0]
+    @dead = true
+    between(0,50) { self.factor += 0.3; self.alpha -= 10; }.then { destroy }
+  end
+
+  def dead?
+    @dead
+  end
+
+  def alive?
+    !dead?
+  end
+
+  def update
+    unless dead?
+      self.each_collision(Ship, Asteroid) do |bullet, game_object|
+        game_object.damage(@damage)
+        self.die
+      end
+    end
+  end
+
 end
 
 class Level < GameState
@@ -89,25 +136,42 @@ class Level < GameState
   def setup
     @map = GameObject.create(:image => "Space.png", :factor => $window.factor, :rotation_center => :top_left)
 
-    Player.create(:x=>100, :y=>100)
+    @player = Player.create(:x=>100, :y=>100)
     10.times do
       Asteroid.create(:x=>rand($window.width), :y=>rand($window.height))
     end
 
-    self.viewport.x_min = 0
-    self.viewport.y_min = 0
-    self.viewport.x_max = @map.image.width * $window.factor - $window.width
-    self.viewport.y_max = @map.image.height * $window.factor - $window.height
+    self.viewport.game_area = [0, 0, 1000, 1000]
+  end
+
+  def update
+    super
+    self.viewport.center_around(@player)
+
+    game_objects.destroy_if { |game_object| self.viewport.outside_game_area?(game_object) }
+
+    $window.caption = "Move with arrows! Space to Shoot!- viewport x/y: #{self.viewport.x.to_i}/#{self.viewport.y.to_i} - FPS: #{$window.fps} - Game Objects #{game_objects.size}"
   end
 end
 
 class Asteroid < GameObject
-  has_trait :bounding_circle, :debug => true
-  has_trait :collision_detection
+  trait :bounding_circle, :debug => true
+  traits :collision_detection, :timer
 
   def setup
     @image = Image["Asteroid.png"]
     self.factor = 0.2
+    @life = 100
+  end
+
+  def damage(amount)
+    @life -= amount
+
+    self.die if @life <= 0
+  end
+
+  def die
+    between(0,50) { self.factor += 0.1; self.alpha -= 10; }.then { destroy }
   end
 end
 
