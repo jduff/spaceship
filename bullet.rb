@@ -1,22 +1,34 @@
-class Bullet < Chingu::GameObject
-  def initialize(options={})
-    @creator = options.delete(:creator)
-    super({:image=>Image["burst.png"], :zorder=>ZOrder::Ship, :factor=>0.3, :factor_x=>0.1}.merge(options))
+class Bullet < GameObject
+  trait :bounding_circle, :debug=>DEBUG
+  traits :collision_detection, :velocity, :timer
+
+  def setup
+    @image = Image["fire_bullet.png"]
+    self.factor = 0.75
+    @damage = 10
+
+    @dead = false
   end
-  
+
+  def die
+    self.velocity = [0,0]
+    @dead = true
+    between(0,50) { self.factor += 0.3; self.alpha -= 10; }.then { destroy }
+  end
+
+  def dead?
+    @dead
+  end
+
+  def alive?
+    !dead?
+  end
+
   def update
-    super
-    @factor_x = rand * 0.3
-    vect = (angle - 90).angle_to_vect * 2.5
-    self.x += vect.x
-    self.y += vect.y
-    
-    destroy! if outside_window?
-    
-    $window.game_objects_of_class(Ship).each do |ship|
-      if Gosu::distance(@x, @y, ship.x, ship.y) < 20 && ship != @creator
-        self.destroy!
-        ship.collide(5)
+    unless dead?
+      self.each_collision(Ship, Asteroid) do |bullet, game_object|
+        game_object.damage(@damage)
+        self.die
       end
     end
   end
