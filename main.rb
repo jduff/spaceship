@@ -34,8 +34,6 @@ end
 class Game < Chingu::Window
   def setup
     self.input = {:escape => :exit}
-    self.factor=1.3
-
     switch_game_state(Level.new)
   end
 end
