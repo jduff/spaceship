@@ -1,5 +1,5 @@
 class Asteroid < GameObject
-  trait :bounding_circle, :debug => true
+  trait :bounding_circle, :debug => DEBUG
   traits :collision_detection, :timer
 
   def setup

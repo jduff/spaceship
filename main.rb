@@ -5,7 +5,17 @@ include Chingu
 
 DEBUG = true # Shows bounding circle etc
 
-%w(asteroid bullet ship).each {|file| require File.expand_path file, File.dirname(__FILE__) }
+%w(asteroid bullet ship enemy).each do |file|
+  require File.expand_path file, File.dirname(__FILE__)
+end
+
+class Point
+  attr_accessor :x, :y
+  def initialize(x, y)
+    @x = x
+    @y = y
+  end
+end
 
 class Level < GameState
   has_trait :viewport
@@ -14,8 +24,10 @@ class Level < GameState
     @map = GameObject.create(:image => "Space.png", :factor => $window.factor, :rotation_center => :top_left)
 
     @player = Player.create(:x=>100, :y=>100)
+    @enemy = Enemy.create(:x=>200, :y=>200)
+    @enemy.target = Point.new(300, 300) #@player
     60.times do
-      Asteroid.create(:x=>rand(1500), :y=>rand(1500))
+      Asteroid.create(:x=>rand(1200)+300, :y=>rand(1200)+300)
     end
 
     self.viewport.game_area = [0, 0, 1000, 1000]
