@@ -35,6 +35,12 @@ class Level < GameState
 
   def update
     super
+
+    Ship.each_collision(Ship, Player) do |ship1, ship2|
+      ship1.velocity_x, ship1.velocity_y = -ship1.velocity_x, -ship1.velocity_y
+      ship2.velocity_x, ship2.velocity_y = -ship2.velocity_x, -ship2.velocity_y
+    end
+
     self.viewport.center_around(@player)
 
     game_objects.destroy_if { |game_object| self.viewport.outside_game_area?(game_object) }

@@ -26,6 +26,11 @@ class Enemy < Ship
   end
 
   def execute_behaviour
+    seek
+  end
+
+
+  def seek
     # angle between enemy and target
     angle_to_target = Gosu::angle(x, y, target.x, target.y)
 
